@@ -8,7 +8,7 @@ function init() {
 			scene.fog = new THREE.FogExp2(0xffffff, 0.2);
 	}
 
-	/*Objects*/
+	/*OBJECTS*/
 	var box = getBox(1, 1, 1);
 	var plane = getPlane(20);
 	var pointLight = getPointLight(1);
@@ -16,7 +16,7 @@ function init() {
 
 	plane.name = 'plane-1';
 
-	/*Positions*/
+	/*SETTINGS*/
 	box.position.y = box.geometry.parameters.height/2;
 	plane.rotation.x = Math.PI/2;
 	pointLight.position.y = 2;
@@ -26,13 +26,13 @@ function init() {
 	gui.add(pointLight, 'intensity', 0, 10)
 	gui.add(pointLight.position, 'y', 0, 5);
 
-  /*Adding or Parenting*/
+  /*ADDING OR PARENTING*/
 	scene.add(box);
 	scene.add(plane);
 	pointLight.add(sphere);
 	scene.add(pointLight);
 
-	/*Camera*/
+	/*CAMERA*/
 	var camera = new THREE.PerspectiveCamera(
 		45,
 		window.innerWidth/window.innerHeight,
@@ -46,7 +46,7 @@ function init() {
 
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-	/*Renderer*/
+	/*RENDERER*/
 	var renderer = new THREE.WebGLRenderer();
 	renderer.shadowMap.enabled = true;
 	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -60,6 +60,7 @@ function init() {
 	return scene;
 }
 
+/*CREATE OBJECTS*/
 function getBox(w, h, d) {
 	var geometry = new THREE.BoxGeometry(w, h, d);
 	var material = new THREE.MeshPhongMaterial({
@@ -74,7 +75,6 @@ function getBox(w, h, d) {
 	return mesh;
 }
 
-/*Create Objects*/
 function getPlane(size) {
 	var geometry = new THREE.PlaneGeometry(size, size);
 	var material = new THREE.MeshPhongMaterial({
@@ -102,7 +102,7 @@ function getSphere(size) {
 	return mesh;
 }
 
-/*Create Light*/
+/*CREATE LIGHT*/
 function getPointLight(intensity){
 	var light = new THREE.PointLight(0xffffff,intensity);
 	light.castShadow = true;
@@ -110,7 +110,7 @@ function getPointLight(intensity){
 	return light;
 }
 
-/*Recursive Render Update*/
+/*RECURSIVE RENDER UPDATE*/
 function update(renderer, scene, camera, controls) {
 	renderer.render(
 		scene,
