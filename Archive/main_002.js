@@ -7,14 +7,15 @@ function init() {
 	if (enableFog) {
 		scene.fog = new THREE.FogExp2(0xffffff, 0.2);
 	}
-	
+
 	var plane = getPlane(30);
 	var directionalLight = getDirectionalLight(1);
 	var sphere = getSphere(0.05);
 	var boxGrid = getBoxGrid(10, 1.5);
+	var helper = new THREE.CameraHelper(directionalLight.shadow.camera);
+	var ambientLight = getAmbientLight(10);
 
 	plane.name = 'plane-1';
-	boxGrid.name = 'boxGrid';
 
 	plane.rotation.x = Math.PI/2;
 	directionalLight.position.x = 13;
@@ -26,6 +27,8 @@ function init() {
 	directionalLight.add(sphere);
 	scene.add(directionalLight);
 	scene.add(boxGrid);
+	scene.add(helper);
+	scene.add(ambientLight);
 
 	gui.add(directionalLight, 'intensity', 0, 10);
 	gui.add(directionalLight.position, 'x', 0, 20);
@@ -39,9 +42,9 @@ function init() {
 		1000
 	);
 
-	camera.position.x = 10;
-	camera.position.y = 18;
-	camera.position.z = -18;
+	camera.position.x = 1;
+	camera.position.y = 2;
+	camera.position.z = 5;
 
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
 
@@ -65,7 +68,7 @@ function getBox(w, h, d) {
 	});
 	var mesh = new THREE.Mesh(
 		geometry,
-		material 
+		material
 	);
 	mesh.castShadow = true;
 
@@ -103,7 +106,7 @@ function getPlane(size) {
 	});
 	var mesh = new THREE.Mesh(
 		geometry,
-		material 
+		material
 	);
 	mesh.receiveShadow = true;
 
@@ -117,7 +120,7 @@ function getSphere(size) {
 	});
 	var mesh = new THREE.Mesh(
 		geometry,
-		material 
+		material
 	);
 
 	return mesh;
@@ -153,6 +156,13 @@ function getDirectionalLight(intensity) {
 	return light;
 }
 
+function getAmbientLight(intensity) {
+	var light = new THREE.AmbientLight('rgb(10, 30, 50)', intensity);
+	light.castShadow = true;
+
+	return light;
+}
+
 function update(renderer, scene, camera, controls) {
 	renderer.render(
 		scene,
@@ -160,12 +170,6 @@ function update(renderer, scene, camera, controls) {
 	);
 
 	controls.update();
-
-	var boxGrid = scene.getObjectByName('boxGrid');
-	boxGrid.children.forEach(function(child) {
-		child.scale.y = Math.random();
-		child.position.y = child.scale.y/2;
-	});
 
 	requestAnimationFrame(function() {
 		update(renderer, scene, camera, controls);
